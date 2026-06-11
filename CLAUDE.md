@@ -18,27 +18,40 @@ npm install       # Install dependencies
 
 ## Architecture
 
-### Current Structure
-- **Single-file monolithic design**: All application logic lives in `src/App.jsx`
-- **State management**: Uses React `useState` hook exclusively for:
-  - Transaction list (id, description, amount, type, category, date)
-  - Form inputs (description, amount, type, category)
-  - Filter selections (filterType, filterCategory)
-- **Tech stack**: React 19 + Vite 7 with ESLint configuration
+### Component Structure
+The app uses component composition with clear separation of concerns:
 
-### Key Flows
-1. **Transaction Display**: Renders transactions in a table with category and type-based filtering
-2. **Summary Calculations**: Derives totalIncome, totalExpenses, and balance from transaction array in real-time
-3. **Transaction Entry**: Form submission creates new transaction objects with Date.now() as ID and current date
-4. **Filtering**: Applies chainable filters on type and category to `filteredTransactions`
+- **App.jsx** — Root component managing the transactions state and orchestrating child components
+- **Summary.jsx** — Displays financial summary (income, expenses, balance). Calculates totals from transactions
+- **TransactionForm.jsx** — Self-contained form component that manages its own state (description, amount, type, category). Calls `onAddTransaction` callback when submitting
+- **TransactionList.jsx** — Displays filtered transaction table. Manages its own filter state (filterType, filterCategory)
+- **constants.js** — Centralized CATEGORIES array shared across form and list components
+
+### State Management
+Uses React `useState` distributed across components:
+- **App**: Transactions array only
+- **TransactionForm**: Form inputs (description, amount, type, category)
+- **TransactionList**: Filter selections (filterType, filterCategory)
+- **Summary**: None (pure calculation from transactions prop)
+
+### Data Flow
+1. User submits form → TransactionForm creates transaction object → calls `onAddTransaction(newTransaction)`
+2. App receives transaction → updates transactions state
+3. Summary automatically recalculates from new transactions array
+4. TransactionList displays transactions with user-selected filters applied locally
+
+### Improvements Made
+- ✅ Fixed amount calculation bug (amounts now stored as numbers, not strings)
+- ✅ Component-based architecture with clear responsibilities
+- ✅ Each component manages only its own state
+- ✅ Categories centralized in `constants.js`
+- ✅ Form and filters are encapsulated within their components
 
 ### Known Limitations
-- All logic centralized in single component (no separation of concerns)
-- State updates mutate array by spreading (no transaction deletion/editing UI)
-- Hard-coded category list in App.jsx
-- No data persistence (state resets on refresh)
-- Amounts stored as strings, not numbers (causes bugs in calculations)
+- No data persistence (state resets on page refresh)
+- No transaction deletion/editing UI
 - No form validation beyond emptiness check
+- No undo/redo functionality
 
 ## Development Notes
 
