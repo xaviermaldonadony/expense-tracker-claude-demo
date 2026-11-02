@@ -1,7 +1,10 @@
 import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { capitalize, formatMoney, formatWholeMoney } from './format';
+import { formatMoney, formatWholeMoney } from './format';
 
-const AXIS_STYLE = { fill: '#5d626b', fontSize: 12 };
+const INK = '#16202a';
+const SLATE = '#5b6670';
+const RULE = '#d9ddd8';
+const ACCENT = '#1f5c4a';
 
 function SpendingChart({ transactions }) {
   const totalsByCategory = {};
@@ -16,36 +19,24 @@ function SpendingChart({ transactions }) {
     .sort((a, b) => b.amount - a.amount);
 
   return (
-    <div className="spending-chart">
+    <section className="spending-chart">
       <h2>Spending by category</h2>
       {data.length === 0 ? (
         <p className="chart-empty">No expenses yet.</p>
       ) : (
-        <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={data} margin={{ top: 24, right: 8, left: 0, bottom: 0 }}>
-            <CartesianGrid vertical={false} stroke="#e3e5e9" />
-            <XAxis
-              dataKey="category"
-              tickFormatter={capitalize}
-              tick={AXIS_STYLE}
-              tickLine={false}
-              axisLine={{ stroke: '#e3e5e9' }}
-            />
-            <YAxis
-              tickFormatter={formatWholeMoney}
-              tick={AXIS_STYLE}
-              tickLine={false}
-              axisLine={false}
-              width={64}
-            />
-            <Tooltip formatter={formatMoney} cursor={{ fill: '#f4f5f7' }} />
-            <Bar dataKey="amount" name="Spent" fill="#2a78d6" radius={[6, 6, 0, 0]} maxBarSize={56}>
-              <LabelList dataKey="amount" position="top" formatter={formatWholeMoney} fill="#16181c" fontSize={12} />
+        <ResponsiveContainer width="100%" height={280}>
+          <BarChart data={data} margin={{ top: 20, right: 10, left: 10, bottom: 5 }}>
+            <CartesianGrid vertical={false} stroke={RULE} />
+            <XAxis dataKey="category" stroke={RULE} tick={{ fill: SLATE, fontSize: 12 }} tickLine={false} />
+            <YAxis tickFormatter={formatWholeMoney}stroke={RULE} tick={{ fill: SLATE, fontSize: 12 }} tickLine={false} width={64} />
+            <Tooltip formatter={formatMoney} cursor={{ fill: '#e8ebe6' }} />
+            <Bar dataKey="amount" name="Spent" fill={ACCENT} radius={[2, 2, 0, 0]}>
+              <LabelList dataKey="amount" position="top" formatter={formatWholeMoney} fill={INK} fontSize={12} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>
       )}
-    </div>
+    </section>
   );
 }
 

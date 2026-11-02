@@ -1,20 +1,12 @@
 :root {
-  --paper: #f4f5f7;
-  --surface: #ffffff;
-  --ink: #16181c;
-  --ink-muted: #5d626b;
-  --hairline: #e3e5e9;
-  --row-hover: #f7f8fa;
-  --accent: #2a78d6;
-  --accent-strong: #1f63b8;
-  --income: #17825f;
-  --spend: #c83a4a;
-  --radius: 10px;
-  --radius-control: 6px;
-
-  color-scheme: light;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  -webkit-font-smoothing: antialiased;
+  --paper: #f4f5f2;
+  --ink: #16202a;
+  --slate: #5b6670;
+  --rule: #d9ddd8;
+  --accent: #1f5c4a;
+  --brick: #a23e2e;
+  --font-ui: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Newsreader', Georgia, serif;
 }
 
 * {
@@ -24,8 +16,8 @@
 }
 
 body {
+  font-family: var(--font-ui);
   background-color: var(--paper);
   color: var(--ink);
-  font-size: 14px;
-  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
 }

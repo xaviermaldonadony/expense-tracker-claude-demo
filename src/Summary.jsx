@@ -11,32 +11,21 @@ function Summary({ transactions }) {
 
   const balance = totalIncome - totalExpenses;
 
-  // Share of all money that moved (income + expenses) that went out as spending.
-  const flow = totalIncome + totalExpenses;
-  const spentShare = flow === 0 ? 0 : (totalExpenses / flow) * 100;
-  const incomeShare = flow === 0 ? 0 : (totalIncome / flow) * 100;
-
   return (
-    <section className="balance-hero">
-      <p className="balance-label">Balance</p>
-      <p className="balance-value">{formatMoney(balance)}</p>
-
-      <div
-        className="split"
-        role="img"
-        aria-label={`Spent ${Math.round(spentShare)}% of total income and expenses`}
-      >
-        <span className="split-income" style={{ width: `${incomeShare}%` }} />
-        <span className="split-spent" style={{ width: `${spentShare}%` }} />
+    <section className="summary">
+      <div>
+        <p className="summary-label">Balance</p>
+        <p className={balance < 0 ? "balance-amount expense-amount" : "balance-amount"}>
+          {formatMoney(balance)}
+        </p>
       </div>
-
-      <dl className="breakdown">
+      <dl className="totals">
         <div>
           <dt>Income</dt>
           <dd className="income-amount">{formatMoney(totalIncome)}</dd>
         </div>
         <div>
-          <dt>Spent</dt>
+          <dt>Expenses</dt>
           <dd className="expense-amount">{formatMoney(totalExpenses)}</dd>
         </div>
       </dl>
