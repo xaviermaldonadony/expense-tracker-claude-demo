@@ -4,5 +4,8 @@
       "Bash(npm install *)",
       "Bash(npm run *)"
     ]
+  },
+  "skillOverrides": {
+    "frontend-design": "name-only"
   }
 }

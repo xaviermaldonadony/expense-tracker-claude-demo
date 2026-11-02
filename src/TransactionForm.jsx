@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CATEGORIES } from './constants';
+import { capitalize } from './format';
 
 function TransactionForm({ onAddTransaction }) {
   const [description, setDescription] = useState("");
@@ -29,30 +30,32 @@ function TransactionForm({ onAddTransaction }) {
 
   return (
     <div className="add-transaction">
-      <h2>Add Transaction</h2>
+      <h2>Add transaction</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
+          aria-label="Description"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
         <input
           type="number"
+          aria-label="Amount"
           placeholder="Amount"
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
         />
-        <select value={type} onChange={(e) => setType(e.target.value)}>
+        <select aria-label="Type" value={type} onChange={(e) => setType(e.target.value)}>
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
-        <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <select aria-label="Category" value={category} onChange={(e) => setCategory(e.target.value)}>
           {CATEGORIES.map(cat => (
-            <option key={cat} value={cat}>{cat}</option>
+            <option key={cat} value={cat}>{capitalize(cat)}</option>
           ))}
         </select>
-        <button type="submit">Add</button>
+        <button type="submit">Add transaction</button>
       </form>
     </div>
   );

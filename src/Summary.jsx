@@ -1,3 +1,5 @@
+import { formatMoney } from './format';
+
 function Summary({ transactions }) {
   const totalIncome = transactions
     .filter(t => t.type === "income")
@@ -9,21 +11,36 @@ function Summary({ transactions }) {
 
   const balance = totalIncome - totalExpenses;
 
+  // Share of all money that moved (income + expenses) that went out as spending.
+  const flow = totalIncome + totalExpenses;
+  const spentShare = flow === 0 ? 0 : (totalExpenses / flow) * 100;
+  const incomeShare = flow === 0 ? 0 : (totalIncome / flow) * 100;
+
   return (
-    <div className="summary">
-      <div className="summary-card">
-        <h3>Income</h3>
-        <p className="income-amount">${totalIncome}</p>
+    <section className="balance-hero">
+      <p className="balance-label">Balance</p>
+      <p className="balance-value">{formatMoney(balance)}</p>
+
+      <div
+        className="split"
+        role="img"
+        aria-label={`Spent ${Math.round(spentShare)}% of total income and expenses`}
+      >
+        <span className="split-income" style={{ width: `${incomeShare}%` }} />
+        <span className="split-spent" style={{ width: `${spentShare}%` }} />
       </div>
-      <div className="summary-card">
-        <h3>Expenses</h3>
-        <p className="expense-amount">${totalExpenses}</p>
-      </div>
-      <div className="summary-card">
-        <h3>Balance</h3>
-        <p className="balance-amount">${balance}</p>
-      </div>
-    </div>
+
+      <dl className="breakdown">
+        <div>
+          <dt>Income</dt>
+          <dd className="income-amount">{formatMoney(totalIncome)}</dd>
+        </div>
+        <div>
+          <dt>Spent</dt>
+          <dd className="expense-amount">{formatMoney(totalExpenses)}</dd>
+        </div>
+      </dl>
+    </section>
   );
 }
 
