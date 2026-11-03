@@ -1,21 +1,19 @@
 import { formatMoney } from './format';
+import { sumByType } from './transactions';
 
 function Summary({ transactions }) {
-  const totalIncome = transactions
-    .filter(t => t.type === "income")
-    .reduce((sum, t) => sum + t.amount, 0);
+  const totalIncome = sumByType(transactions, 'income');
+  const totalExpenses = sumByType(transactions, 'expense');
 
-  const totalExpenses = transactions
-    .filter(t => t.type === "expense")
-    .reduce((sum, t) => sum + t.amount, 0);
-
-  const balance = totalIncome - totalExpenses;
+  // Round to cents so float residue (e.g. 0.3 - 0.1 - 0.2) doesn't show as -$0.00.
+  // `|| 0` turns a negative zero into a plain zero.
+  const balance = Math.round((totalIncome - totalExpenses) * 100) / 100 || 0;
 
   return (
     <section className="summary">
       <div>
         <p className="summary-label">Balance</p>
-        <p className={balance < 0 ? "balance-amount expense-amount" : "balance-amount"}>
+        <p className={balance < 0 ? 'balance-amount expense-amount' : 'balance-amount'}>
           {formatMoney(balance)}
         </p>
       </div>

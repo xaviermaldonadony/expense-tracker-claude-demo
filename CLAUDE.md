@@ -56,10 +56,10 @@ A transaction is a plain object:
 {
   id: Number,          // Seed data uses small ints; form uses Date.now()
   description: String,
-  amount: Number,      // Always a number. The form converts with Number(amount)
+  amount: Number,      // Finite, > 0, at most MAX_AMOUNT, at most two decimals. The form converts with Number(amount)
   type: 'income' | 'expense',
   category: String,    // One of CATEGORIES
-  date: String,        // 'YYYY-MM-DD'. Form uses new Date().toISOString().split('T')[0]
+  date: String,        // 'YYYY-MM-DD' in local time. Form uses new Date().toLocaleDateString('en-CA')
 }
 ```
 
@@ -113,11 +113,10 @@ Amounts were stored as strings in seed data and form input, which made income an
 ## Known Limitations
 - No data persistence (state resets on page refresh)
 - No transaction deletion/editing UI
-- No form validation beyond emptiness check (negative or zero amounts are accepted)
+- Form validation (`validate()` in TransactionForm.jsx) requires a non-blank description, a finite amount greater than zero and at most MAX_AMOUNT, and at most two decimal places. Errors show under each field. The form trims the description and keeps type and category between adds.
 - No undo/redo functionality
 - `handleAddTransaction` in App.jsx uses `[...transactions, newTransaction]` rather than a functional state update, so it can read a stale array if called rapidly
-- Seed data contains a mismatch: "Freelance Work" is typed `expense` with category `salary`
-- Summary and TransactionList display amounts as raw numbers (e.g. `$5000`) with no currency or decimal formatting
+- Seed "Freelance Work" is typed `income` with category `salary` (the category is `salary` because CATEGORIES has no income category)
 
 ## Development Notes
 

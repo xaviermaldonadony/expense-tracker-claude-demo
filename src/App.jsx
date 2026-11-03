@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import './App.css';
 import Summary from './Summary';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
-import SpendingChart from './SpendingChart';
+
+// Recharts is large, so the chart loads in its own chunk after the page shell.
+const SpendingChart = lazy(() => import('./SpendingChart'));
 
 function App() {
   const [transactions, setTransactions] = useState([
@@ -35,7 +37,7 @@ function App() {
       id: 4,
       description: 'Freelance Work',
       amount: 800,
-      type: 'expense',
+      type: 'income',
       category: 'salary',
       date: '2025-01-05',
     },
@@ -84,7 +86,9 @@ function App() {
 
       <Summary transactions={transactions} />
       <TransactionForm onAddTransaction={handleAddTransaction} />
-      <SpendingChart transactions={transactions} />
+      <Suspense fallback={<section className="spending-chart"><h2>Spending by category</h2></section>}>
+        <SpendingChart transactions={transactions} />
+      </Suspense>
       <TransactionList transactions={transactions} />
     </div>
   );

@@ -3,28 +3,27 @@ import { CATEGORIES } from './constants';
 import { formatMoney } from './format';
 
 function TransactionList({ transactions }) {
-  const [filterType, setFilterType] = useState("all");
-  const [filterCategory, setFilterCategory] = useState("all");
-  let filteredTransactions = transactions;
-  if (filterType !== "all") {
-    filteredTransactions = filteredTransactions.filter(t => t.type === filterType);
-  }
-  if (filterCategory !== "all") {
-    filteredTransactions = filteredTransactions.filter(t => t.category === filterCategory);
-  }
+  const [filterType, setFilterType] = useState('all');
+  const [filterCategory, setFilterCategory] = useState('all');
+
+  const filteredTransactions = transactions.filter(
+    (t) =>
+      (filterType === 'all' || t.type === filterType) &&
+      (filterCategory === 'all' || t.category === filterCategory),
+  );
 
   return (
     <div className="transactions">
       <h2>Transactions</h2>
       <div className="filters">
-        <select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
+        <select aria-label="Filter by type" value={filterType} onChange={(e) => setFilterType(e.target.value)}>
           <option value="all">All Types</option>
           <option value="income">Income</option>
           <option value="expense">Expense</option>
         </select>
-        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
+        <select aria-label="Filter by category" value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="all">All Categories</option>
-          {CATEGORIES.map(cat => (
+          {CATEGORIES.map((cat) => (
             <option key={cat} value={cat}>{cat}</option>
           ))}
         </select>
@@ -33,20 +32,25 @@ function TransactionList({ transactions }) {
       <table>
         <thead>
           <tr>
-            <th>Date</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Amount</th>
+            <th scope="col">Date</th>
+            <th scope="col">Description</th>
+            <th scope="col">Category</th>
+            <th scope="col">Amount</th>
           </tr>
         </thead>
         <tbody>
-          {filteredTransactions.map(t => (
+          {filteredTransactions.length === 0 && (
+            <tr>
+              <td colSpan={4} className="table-empty">No transactions match these filters.</td>
+            </tr>
+          )}
+          {filteredTransactions.map((t) => (
             <tr key={t.id}>
               <td>{t.date}</td>
               <td>{t.description}</td>
               <td>{t.category}</td>
-              <td className={t.type === "income" ? "income-amount" : "expense-amount"}>
-                {t.type === "income" ? "+" : "-"}{formatMoney(t.amount)}
+              <td className={t.type === 'income' ? 'income-amount' : 'expense-amount'}>
+                {t.type === 'income' ? '+' : '-'}{formatMoney(Math.abs(t.amount))}
               </td>
             </tr>
           ))}

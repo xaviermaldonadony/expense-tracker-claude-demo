@@ -25,3 +25,5 @@ dist-ssr
 
 #random
 notes.txt
+# Local Claude Code settings (per-machine)
+.claude/settings.local.json
